@@ -1,13 +1,19 @@
-<h2>Details about {{hero.name | uppercase}}</h2>
+<ul>
+    <li *ngFor="let hero of heroes"
+    (click)="onSelect(hero)"
+    >
+        {{hero.name}}
+    </li>
+</ul>
 
-<div> <span>id: </span> {{hero.id}}</div>
+<div *ngIf="selectedHero">
 
-<div>
-    <label>name:
-        <!--[(ngModel)] is Angular's two-way data binding syntax.-->
-        <!--Here it binds the hero.name property to the HTML textbox-->
-        <!--so that data can flow in both directions: from the hero.name-->
-        <!--property to the textbox, and from the textbox back to the hero.name.-->
-        <input [(ngModel)]="hero.name" placeholder="name">
-    </label>
+    <h2>{{ selectedHero.name | uppercase }} Details</h2>
+    <div><span>id: </span>{{selectedHero.id}}</div>
+    <div>
+        <label>name:
+            <input [(ngModel)]="selectedHero.name" placeholder="name">
+        </label>
+    </div>
+
 </div>
