@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Hero} from '../hero';
 import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
 
 @Component({
   selector: 'app-heroes',
@@ -8,27 +9,27 @@ import { HEROES } from '../mock-heroes';
   styleUrls: ['./heroes.component.css']
 })
 
-//Always export the component class so you can
-  // import it elsewhere ... like in the AppModule.
 export class HeroesComponent implements OnInit {
-  heroes: Hero[] = HEROES;
 
+  heroes: Hero[];
   selectedHero: Hero;
+
+  constructor(private heroService: HeroService) {}
+
+  getHeroes(): void {
+    // getHeroes returns the Observable<Hero[]>,
+    // you do .subscribe to unwrap the Observable shell over the Hero[]
+    // subscribe takes a function (callback)in its params
+    this.heroService.getHeroes()
+        .subscribe(heroes => this.heroes = heroes);
+    // .subscribe(function(heroes){this.heroes = heroes})
+  }
+
+  ngOnInit() {
+    this.getHeroes();
+  }
 
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
-}
-
-//   public void onSelect(Hero hero) {
-//     ...
-// }
-
-  constructor() {
   }
-
-  // The ngOnInit is a lifecycle hook Angular calls ngOnInit shortly after
-    // creating a component. It's a good place to put initialization logic.
-  ngOnInit() {
-  }
-
 }
