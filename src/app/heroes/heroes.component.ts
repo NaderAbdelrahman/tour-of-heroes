@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {Hero} from '../hero';
-import { HEROES } from '../mock-heroes';
 import { HeroService } from '../hero.service';
 
 @Component({
@@ -12,9 +11,12 @@ import { HeroService } from '../hero.service';
 export class HeroesComponent implements OnInit {
 
   heroes: Hero[];
-  selectedHero: Hero;
 
   constructor(private heroService: HeroService) {}
+
+  ngOnInit() {
+    this.getHeroes();
+  }
 
   getHeroes(): void {
     // getHeroes returns the Observable<Hero[]>,
@@ -25,11 +27,19 @@ export class HeroesComponent implements OnInit {
     // .subscribe(function(heroes){this.heroes = heroes})
   }
 
-  ngOnInit() {
-    this.getHeroes();
+  add(name: string): void {
+    // trim removes unnecessary white space from a string
+    name = name.trim();
+    if (!name) { return; }
+    this.heroService.addHero({ name } as Hero)
+      .subscribe(hero => {
+        this.heroes.push(hero);
+      });
   }
 
-  onSelect(hero: Hero): void {
-    this.selectedHero = hero;
+  delete(hero: Hero): void {
+    this.heroes = this.heroes.filter(h => h !== hero);
+    // Why must it subscribe
+    this.heroService.deleteHero(hero).subscribe();
   }
 }
